@@ -9,6 +9,6 @@ services:
       - "8025:8025"
       - "11143:11143"
     environment:
-      - proxy_url=https://temp-email-api.xxx.xxx
+      - proxy_url=https://temp-email-api.332212.xyz
       - port=8025
       - imap_port=11143
