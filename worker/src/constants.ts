@@ -3,7 +3,7 @@ export const CONSTANTS = {
 
     // DB Version
     DB_VERSION_KEY: 'db_version',
-    DB_VERSION: "v0.0.2",
+    DB_VERSION: "v0.0.3",
 
     // DB settings
     ADDRESS_BLOCK_LIST_KEY: 'address_block_list',
@@ -14,6 +14,7 @@ export const CONSTANTS = {
     VERIFIED_ADDRESS_LIST_KEY: 'verified_address_list',
     NO_LIMIT_SEND_ADDRESS_LIST_KEY: 'no_limit_send_address_list',
     EMAIL_RULE_SETTINGS_KEY: 'email_rule_settings',
+    ROLE_ADDRESS_CONFIG_KEY: 'role_address_config',
 
     // KV
     TG_KV_PREFIX: "temp-mail-telegram",

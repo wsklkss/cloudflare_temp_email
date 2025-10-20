@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { Jwt } from 'hono/utils/jwt'
 
 import i18n from '../i18n'
-import { sendAdminInternalMail, getJsonSetting, saveSetting, getUserRoles } from '../utils'
+import { sendAdminInternalMail, getJsonSetting, saveSetting, getUserRoles, getBooleanValue, hashPassword } from '../utils'
 import { newAddress, handleListQuery } from '../common'
 import { CONSTANTS } from '../constants'
 import cleanup_api from './cleanup_api'
@@ -56,6 +56,7 @@ api.post('/admin/new_address', async (c) => {
             checkAllowDomains: false,
             enableCheckNameRegex: false,
         });
+
         return c.json(res);
     } catch (e) {
         return c.text(`${msgs.FailedCreateAddressMsg}: ${(e as Error).message}`, 400)
@@ -129,6 +130,30 @@ api.get('/admin/show_password/:id', async (c) => {
     return c.json({
         jwt: jwt
     })
+})
+
+api.post('/admin/address/:id/reset_password', async (c) => {
+    const { id } = c.req.param();
+    const { password } = await c.req.json();
+    // 检查功能是否启用
+    if (!getBooleanValue(c.env.ENABLE_ADDRESS_PASSWORD)) {
+        return c.text("Password management is disabled", 403);
+    }
+
+    if (!password) {
+        return c.text("Password is required", 400);
+    }
+
+    const hashedPassword = await hashPassword(password);
+    const { success } = await c.env.DB.prepare(
+        `UPDATE address SET password = ?, updated_at = datetime('now') WHERE id = ?`
+    ).bind(hashedPassword, id).run();
+
+    if (!success) {
+        return c.text("Failed to reset password", 500);
+    }
+
+    return c.json({ success: true });
 })
 
 // mail api
@@ -319,6 +344,8 @@ api.post('/admin/users', admin_user_api.createUser)
 api.post('/admin/users/:user_id/reset_password', admin_user_api.resetPassword)
 api.get('/admin/user_roles', async (c) => c.json(getUserRoles(c)))
 api.post('/admin/user_roles', admin_user_api.updateUserRoles)
+api.get('/admin/role_address_config', admin_user_api.getRoleAddressConfig)
+api.post('/admin/role_address_config', admin_user_api.saveRoleAddressConfig)
 api.get('/admin/users/bind_address/:user_id', admin_user_api.getBindedAddresses)
 api.post('/admin/users/bind_address', admin_user_api.bindAddress)
 

@@ -148,6 +148,10 @@ app.use('/api/*', async (c, next) => {
 	) {
 		await checkoutUserRolePayload(c);
 	}
+	if (c.req.path.startsWith("/api/address_login")) {
+		await next();
+		return;
+	}
 
 	try {
 		return await jwt({ secret: c.env.JWT_SECRET, alg: "HS256" })(c, next);
@@ -189,6 +193,9 @@ app.use('/user_api/*', async (c, next) => {
 	} catch (e) {
 		console.error(e);
 		return c.text(msgs.UserTokenExpiredMsg, 401)
+	}
+	if (c.req.path.startsWith("/user_api/bind_address")) {
+		await checkoutUserRolePayload(c);
 	}
 	if (c.req.path.startsWith('/user_api/bind_address')
 		&& c.req.method === 'POST'

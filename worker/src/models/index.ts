@@ -46,6 +46,8 @@ export type CleanupSettings = {
     cleanAddressDays: number;
     enableInactiveAddressAutoCleanup: boolean | undefined;
     cleanInactiveAddressDays: number;
+    enableUnboundAddressAutoCleanup: boolean | undefined;
+    cleanUnboundAddressDays: number;
 }
 
 export class GeoData {
@@ -152,3 +154,10 @@ export type EmailRuleSettings = {
     blockReceiveUnknowAddressEmail: boolean;
     emailForwardingList: SubdomainForwardAddressList[]
 }
+
+export type RoleConfig = {
+    maxAddressCount?: number;
+    // future configs can be added here
+}
+
+export type RoleAddressConfig = Record<string, RoleConfig>;
