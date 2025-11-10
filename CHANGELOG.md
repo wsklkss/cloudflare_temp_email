@@ -1,6 +1,14 @@
 <!-- markdownlint-disable-file MD004 MD024 MD034 MD036 -->
 # CHANGE LOG
 
+## v1.1.0(main)
+
+## v1.0.7
+
+- feat: |Admin| 新增 IP 黑名单功能，用于限制访问频率较高的 API
+- feat: |Admin| 新增 ASN 组织黑名单功能，支持基于 ASN 组织名称过滤请求（支持文本匹配和正则表达式）
+- feat: |Admin| 新增浏览器指纹黑名单功能，支持基于浏览器指纹过滤请求（支持精确匹配和正则表达式）
+
 ## v1.0.6
 
 - feat: |DB| update db schema add index
