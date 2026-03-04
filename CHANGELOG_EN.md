@@ -11,15 +11,20 @@
 ### Features
 
 - feat: |User Registration| Add email regex validation for user registration, admins can configure email format validation rules
+- feat: |Frontend| Add configurable Status menu button via `STATUS_URL` environment variable for status monitoring page link
 
 ### Bug Fixes
 
+- fix: |Admin API| Fix `/admin/account_settings` throwing `Cannot read properties of undefined (reading 'put')` when KV is not configured and `fromBlockList` is empty
+- fix: |Database| Fix missing `idx_raw_mails_message_id` index in `DB_INIT_QUERIES` causing full table scan on `UPDATE raw_mails ... WHERE message_id = ?`, sync `schema.sql` with init code, add v0.0.6 migration
 - fix: |Docs| Fix User Mail API documentation incorrectly using `x-admin-auth`, changed to correct `x-user-token`
 - docs: |Docs| Add Admin API documentation for delete mail, delete address, clear inbox, and clear sent items
 
 ### Improvements
 
 - style: |Mail List| Improve empty state display for inbox and sent box, show different messages based on mail count, add semantic icons
+- feat: |Admin| Add ip.im lookup link for source IP in address list, click to quickly view IP information
+- docs: |Docs| Fix VitePress i18n language switch path error, use dual-prefix locale configuration
 
 ## v1.3.0
 
