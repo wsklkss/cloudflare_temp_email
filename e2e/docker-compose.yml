@@ -1,0 +1,96 @@
+services:
+  mailpit:
+    image: axllent/mailpit:v1.29
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  worker:
+    build:
+      context: ..
+      dockerfile: e2e/Dockerfile.worker
+    ports:
+      - "8787:8787"
+    depends_on:
+      - mailpit
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8787/health_check"]
+      interval: 3s
+      timeout: 5s
+      start_period: 10s
+      retries: 20
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: e2e/Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      worker:
+        condition: service_healthy
+
+  smtp-proxy:
+    build:
+      context: ../smtp_proxy_server
+      dockerfile: dockerfile
+    ports:
+      - "11025:8025"
+      - "11143:11143"
+    environment:
+      PROXY_URL: http://worker:8787
+      PORT: "8025"
+      IMAP_PORT: "11143"
+    depends_on:
+      worker:
+        condition: service_healthy
+
+  smtp-proxy-tls:
+    build:
+      context: ../smtp_proxy_server
+      dockerfile: dockerfile
+    ports:
+      - "11026:8026"
+      - "11144:11144"
+    environment:
+      PROXY_URL: http://worker:8787
+      PORT: "8026"
+      IMAP_PORT: "11144"
+      smtp_tls_cert: /certs/cert.pem
+      smtp_tls_key: /certs/key.pem
+      imap_tls_cert: /certs/cert.pem
+      imap_tls_key: /certs/key.pem
+    entrypoint: ["/bin/bash", "/e2e-scripts/smtp-tls-entrypoint.sh"]
+    volumes:
+      - ./scripts:/e2e-scripts:ro
+    depends_on:
+      worker:
+        condition: service_healthy
+
+  e2e-runner:
+    build:
+      context: ..
+      dockerfile: e2e/Dockerfile.e2e
+    environment:
+      WORKER_URL: http://worker:8787
+      FRONTEND_URL: https://frontend:5173
+      MAILPIT_API: http://mailpit:8025/api
+      SMTP_PROXY_HOST: smtp-proxy
+      SMTP_PROXY_SMTP_PORT: "8025"
+      SMTP_PROXY_IMAP_PORT: "11143"
+      SMTP_PROXY_TLS_HOST: smtp-proxy-tls
+      SMTP_PROXY_TLS_SMTP_PORT: "8026"
+      SMTP_PROXY_TLS_IMAP_PORT: "11144"
+      CI: "true"
+    depends_on:
+      worker:
+        condition: service_healthy
+      frontend:
+        condition: service_started
+      smtp-proxy:
+        condition: service_started
+      smtp-proxy-tls:
+        condition: service_started
+    volumes:
+      - ./test-results:/app/e2e/test-results
+      - ./playwright-report:/app/e2e/playwright-report
