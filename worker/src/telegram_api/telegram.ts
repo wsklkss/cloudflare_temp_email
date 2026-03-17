@@ -6,11 +6,13 @@ import { callbackQuery } from "telegraf/filters";
 import { CONSTANTS } from "../constants";
 import { getBooleanValue, getDomains, getJsonObjectValue, getStringValue } from '../utils';
 import { TelegramSettings } from "./settings";
+import { sendTelegramAttachments } from "./tg_file_upload";
 import { bindTelegramAddress, deleteTelegramAddress, jwtListToAddressData, tgUserNewAddress, unbindTelegramAddress, unbindTelegramByAddress } from "./common";
 import { commonParseMail } from "../common";
 import { UserFromGetMe } from "telegraf/types";
 import i18n from "../i18n";
 import { LocaleMessages } from "../i18n/type";
+
 
 // Helper to get messages by userId
 const getTgMessages = async (
@@ -424,6 +426,7 @@ export async function sendMailToTelegram(
     const buildAndSend = async (targetUserId: string, msgs: LocaleMessages) => {
         const { mail } = await parseMail(msgs, parsedEmailContext, address, new Date().toUTCString());
         if (!mail) return;
+        const attachments = parsedEmailContext.parsedEmail?.attachments || [];
         const buttons = [];
         if (settings?.miniAppUrl && mailId) {
             const url = new URL(settings.miniAppUrl);
@@ -434,6 +437,11 @@ export async function sendMailToTelegram(
         await bot.telegram.sendMessage(targetUserId, mail, {
             ...Markup.inlineKeyboard([...buttons])
         });
+        // send attachments via native fetch (telegraf multipart upload is incompatible with CF Workers)
+        if (getBooleanValue(c.env.ENABLE_TG_PUSH_ATTACHMENT) && attachments.length > 0) {
+            const caption = `From: ${parsedEmailContext.parsedEmail?.sender || ""}\nSubject: ${parsedEmailContext.parsedEmail?.subject || ""}`;
+            await sendTelegramAttachments(c.env.TELEGRAM_BOT_TOKEN, targetUserId, attachments, caption);
+        }
     };
 
     if (globalPush) {

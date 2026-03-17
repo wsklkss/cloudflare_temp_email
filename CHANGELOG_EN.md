@@ -11,10 +11,13 @@
 ### Features
 
 - feat: |Auto Reply| Add regex matching support for sender filter using `/pattern/` syntax (e.g. `/@example\.com$/`), backward compatible with prefix matching
+- feat: |Turnstile| Add global Turnstile CAPTCHA for all login forms via `ENABLE_GLOBAL_TURNSTILE_CHECK` env var (#767)
+- feat: |Telegram| Support sending email attachments in Telegram push (50MB per file limit), multiple attachments sent via `sendMediaGroup`, controlled by `ENABLE_TG_PUSH_ATTACHMENT` env var (#894)
 
 ### Bug Fixes
 
 - fix: |Auto Reply| Fix auto-reply not triggering when `source_prefix` is empty string (#459), empty value now correctly matches all senders
+- fix: |OAuth2| Fix OAuth2 login callback failure on Android via browser and other mobile browsers due to sessionStorage loss during redirect, add localStorage fallback (#900)
 
 ### Testing
 

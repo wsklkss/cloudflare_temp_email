@@ -85,12 +85,16 @@ ENABLE_AUTO_REPLY = false
 # Turnstile verification
 # CF_TURNSTILE_SITE_KEY = ""
 # CF_TURNSTILE_SECRET_KEY = ""
+# Enable global Turnstile check for all login forms (requires Turnstile keys above)
+# ENABLE_GLOBAL_TURNSTILE_CHECK = true
 # telegram bot
 # TG_MAX_ADDRESS = 5
 # telegram bot info, predefined bot info can reduce latency of the webhook
 # TG_BOT_INFO = "{}"
 # allow user to switch language via /lang command
 # TG_ALLOW_USER_LANG = true
+# enable sending email attachments via Telegram push (50MB per file limit)
+# ENABLE_TG_PUSH_ATTACHMENT = true
 # global forward address list, if set, all emails will be forwarded to these addresses
 # FORWARD_ADDRESS_LIST = ["xxx@xxx.com"]
 # subdomain forward address list, if set, subdomain emails will be forwarded to these addresses
