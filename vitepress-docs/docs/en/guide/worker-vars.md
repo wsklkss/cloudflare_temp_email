@@ -32,10 +32,32 @@
 | `ADDRESS_REGEX`                       | Text      | Regular expression to replace illegal symbols in `email address` name, symbols not in the regex will be replaced. Default is `[^a-z0-9]` if not set. Use with caution as some symbols may prevent email reception | `[^a-z0-9]`                               |
 | `DEFAULT_DOMAINS`                     | JSON      | Default domains available to users (not logged in or users without assigned roles)                                                                                                                                | `["awsl.uk", "dreamhunter2333.xyz"]`      |
 | `CREATE_ADDRESS_DEFAULT_DOMAIN_FIRST` | Text/JSON | Whether to prioritize default domain when creating new addresses, if set to true, will use the first domain when no domain is specified, mainly for telegram bot scenarios                                        | `false`                                   |
+| `ENABLE_CREATE_ADDRESS_SUBDOMAIN_MATCH` | Text/JSON | Whether to allow create-address APIs to use base-domain suffix matching. When enabled, if `example.com` is allowed, `/api/new_address` and `/admin/new_address` can also accept `foo.example.com` or `a.b.example.com` | `true` |
+| `RANDOM_SUBDOMAIN_DOMAINS`            | JSON      | Base domains that allow optional random subdomain creation, so `name@abc.com` can become `name@<random>.abc.com`                                                                                                   | `["abc.com"]`                             |
+| `RANDOM_SUBDOMAIN_LENGTH`             | Number    | Random subdomain length, default `8`, valid range `1-63`                                                                                                                                                           | `8`                                       |
 | `DOMAIN_LABELS`                       | JSON      | For Chinese domains, you can use DOMAIN_LABELS to display Chinese names                                                                                                                                           | `["中文.awsl.uk", "dreamhunter2333.xyz"]` |
 | `ENABLE_AUTO_REPLY`                   | Text/JSON | Allow automatic email replies. Sender filter (`source_prefix`) supports three modes: empty to match all senders, prefix for `startsWith` matching, or `/regex/` syntax for regex matching (e.g. `/@example\.com$/`) | `true`                                    |
 | `DEFAULT_SEND_BALANCE`                | Text/JSON | Default email sending balance, will be 0 if not set                                                                                                                                                               | `1`                                       |
 | `ENABLE_ADDRESS_PASSWORD`             | Text/JSON | Enable address password feature, when enabled, passwords will be auto-generated for new addresses, supports password login and modification                                                                       | `true`                                    |
+
+> [!NOTE]
+> `RANDOM_SUBDOMAIN_DOMAINS` only controls automatic random subdomain generation during mailbox
+> creation. It does not create Cloudflare-side subdomain routing for you.
+>
+> Subdomain addresses are usually best used for receiving only; for sending, prefer the main
+> domain.
+>
+> `ENABLE_CREATE_ADDRESS_SUBDOMAIN_MATCH` is different from random subdomain generation: it lets
+> API callers **directly specify** a subdomain such as `foo.example.com`, while random subdomain
+> generation appends one automatically during creation.
+>
+> `ENABLE_CREATE_ADDRESS_SUBDOMAIN_MATCH` precedence: if the env is explicitly set to `false`, the
+> feature is globally forced off; otherwise the persisted admin setting takes precedence, and the env
+> value is only used as a fallback when no admin setting has been saved.
+>
+> The admin panel exposes three explicit states: **Follow Environment Variable**, **Force Enable**,
+> and **Force Disable**. Saving **Follow Environment Variable** clears the admin override and returns
+> the feature to the "unset" fallback behavior.
 
 ## Email Reception Related Variables
 
@@ -48,8 +70,11 @@
 | `FORWARD_ADDRESS_LIST`          | JSON      | Global forward address list, disabled if not configured, all emails will be forwarded to listed addresses when enabled | `["xxx@xxx.com"]`          |
 | `REMOVE_EXCEED_SIZE_ATTACHMENT` | Text/JSON | If attachment exceeds 2MB, remove it, email may lose some information due to parsing                                   | `true`                     |
 | `REMOVE_ALL_ATTACHMENT`         | Text/JSON | Remove all attachments, email may lose some information due to parsing                                                 | `true`                     |
+| `ENABLE_MAIL_GZIP`             | Text/JSON | When enabled, new emails are gzip-compressed and stored in `raw_blob` column to save D1 database space. Existing plaintext `raw` data is automatically compatible for reading. **Run database migration first (`Admin -> Quick Setup -> Database -> Migrate Database` or `POST /admin/db_migration`) to ensure the `raw_blob` column exists before enabling. This feature adds compression/decompression CPU overhead, so enabling it on a paid Cloudflare Worker plan is recommended.** | `true`                     |
 
 > [!NOTE]
+> `ENABLE_MAIL_GZIP` adds CPU cost for gzip compression on write and decompression on read. Free-tier Workers are more likely to hit CPU limits, so a paid plan is recommended before enabling it
+>
 > `Junk mail checking` and `attachment removal` require email parsing, free tier CPU is limited, may cause large email parsing timeout
 >
 > If you want stronger email parsing capabilities

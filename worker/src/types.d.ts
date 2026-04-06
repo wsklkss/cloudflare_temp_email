@@ -25,6 +25,9 @@ type Bindings = {
     MAX_ADDRESS_LEN: string | number | undefined
     DEFAULT_DOMAINS: string | string[] | undefined
     DOMAINS: string | string[] | undefined
+    ENABLE_CREATE_ADDRESS_SUBDOMAIN_MATCH: string | boolean | undefined
+    RANDOM_SUBDOMAIN_DOMAINS: string | string[] | undefined
+    RANDOM_SUBDOMAIN_LENGTH: string | number | undefined
     DISABLE_CUSTOM_ADDRESS_NAME: string | boolean | undefined
     CREATE_ADDRESS_DEFAULT_DOMAIN_FIRST: string | boolean | undefined
     ADMIN_USER_ROLE: string | undefined
@@ -94,6 +97,9 @@ type Bindings = {
     // AI extraction config
     ENABLE_AI_EMAIL_EXTRACT: string | boolean | undefined
     AI_EXTRACT_MODEL: string | undefined
+
+    // gzip compression for raw_mails
+    ENABLE_MAIL_GZIP: string | boolean | undefined
 
     // E2E testing
     E2E_TEST_MODE: string | boolean | undefined
