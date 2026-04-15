@@ -6,13 +6,40 @@
   <a href="CHANGELOG_EN.md">English</a>
 </p>
 
-## v1.6.0(main)
+## v1.7.0(main)
 
 ### Features
 
 ### Bug Fixes
 
+- fix: |User Mailbox| Fix an issue where the user center still showed delete actions and could still delete mail via `/user_api/mails/:id` when `ENABLE_USER_DELETE_EMAIL` was disabled (#978)
+- fix: |Address| Lowercase configured prefixes when creating addresses to avoid generating mixed-case mailbox names; existing data must be migrated to lowercase manually by the user (#930)
+
 ### Improvements
+
+## v1.6.0(main)
+
+### Features
+
+- feat: |Admin| Add **IP Whitelist (strict mode)** to IP blacklist settings: when enabled, ONLY whitelisted IPs can access rate-limited APIs (create address, send mail, external send mail, user register, verify code); all other IPs are denied (#920)
+- feat: |Address| Support setting max address count to `0` for unlimited (#968)
+
+### Bug Fixes
+
+- fix: |Admin| Fix `D1_ERROR: LIKE or GLOB pattern too complex` on `/admin/address` and `/admin/users` when searching by full email address (query length pushes the LIKE pattern over D1's 50-byte limit). Long queries now fall back to `instr()` to bypass the LIKE pattern length cap (#956)
+
+### Improvements
+
+- docs: |Send Mail API| Clarify authentication differences between `/api/send_mail` and `/external/api/send_mail`, add "Address JWT" concept explanation (#922)
+- docs: |Worker Variables| Add generation instructions for `JWT_SECRET` (`openssl rand -hex 32`) (#932)
+- docs: |CLI Deployment| Add usage explanation for `routes` custom domain configuration (#932)
+- docs: |Admin API| Add `address_id` field to `/admin/new_address` response documentation (#912)
+- docs: |Admin| Add account list sorting feature documentation (#918)
+- docs: |Pages Deployment| Add SPA mode instructions to avoid 404 when refreshing or accessing sub-paths directly (#813)
+- docs: |Sidebar| Restructure documentation sidebar into "Core Configuration", "Notifications & Integrations", "Advanced Features", "Admin Console" groups
+- docs: |FAQ| Significantly expand FAQ with SPA 404, send balance, SMTP_CONFIG, mail client login and more (#919, #925, #839, #715, #921, #609)
+- docs: |Email Sending| Enhance SMTP_CONFIG field reference and multi-domain examples, add send balance mechanism documentation
+- docs: |Email Routing| Note that subdomains require Email Routing to be enabled separately; enabling it only on the apex domain does not cover subdomains (#969)
 
 ## v1.5.0(main)
 
