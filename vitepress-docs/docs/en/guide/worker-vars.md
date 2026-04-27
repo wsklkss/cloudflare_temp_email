@@ -13,6 +13,10 @@
 | `ENABLE_USER_CREATE_EMAIL` | Text/JSON   | Whether to allow users to create mailboxes, disabled if not configured | `true`                               |
 | `ENABLE_USER_DELETE_EMAIL` | Text/JSON   | Whether to allow users to delete emails, disabled if not configured    | `true`                               |
 
+> [!IMPORTANT] `DOMAINS` and `DEFAULT_DOMAINS` must already be set up in Cloudflare
+> Every domain you put here (including `DEFAULT_DOMAINS`, `USER_ROLES.domains`, `RANDOM_SUBDOMAIN_DOMAINS` further below) **must already have Cloudflare Email Routing enabled and its email DNS records provisioned**. After the Worker is deployed, bind the domain's Catch-all rule to that Worker; otherwise inbound mail will never reach the Worker.
+> See [Cloudflare Email Routing](/en/guide/email-routing) for the setup steps.
+
 ## Console Related Variables
 
 | Variable Name                  | Type      | Description                                             | Example          |
@@ -37,7 +41,7 @@
 | `RANDOM_SUBDOMAIN_LENGTH`             | Number    | Random subdomain length, default `8`, valid range `1-63`                                                                                                                                                           | `8`                                       |
 | `DOMAIN_LABELS`                       | JSON      | For Chinese domains, you can use DOMAIN_LABELS to display Chinese names                                                                                                                                           | `["中文.awsl.uk", "dreamhunter2333.xyz"]` |
 | `ENABLE_AUTO_REPLY`                   | Text/JSON | Allow automatic email replies. Sender filter (`source_prefix`) supports three modes: empty to match all senders, prefix for `startsWith` matching, or `/regex/` syntax for regex matching (e.g. `/@example\.com$/`) | `true`                                    |
-| `DEFAULT_SEND_BALANCE`                | Text/JSON | Default email sending balance, will be 0 if not set                                                                                                                                                               | `1`                                       |
+| `DEFAULT_SEND_BALANCE`                | Text/JSON | Default email sending balance. When greater than `0`, it is auto-initialized when users open the settings page or send mail for the first time. Defaults to `0` if unset                                                                                 | `1`                                       |
 | `ENABLE_ADDRESS_PASSWORD`             | Text/JSON | Enable address password feature, when enabled, passwords will be auto-generated for new addresses, supports password login and modification                                                                       | `true`                                    |
 | `SEND_MAIL_DOMAINS`                   | JSON      | Restrict which sender domains can use the `SEND_MAIL` binding; when unset or empty, all domains are allowed                                                                                                     | `["example.com", "mail.example.com"]`     |
 

@@ -6,6 +6,26 @@
   <a href="CHANGELOG_EN.md">English</a>
 </p>
 
+## v1.8.0(main)
+
+### Features
+
+- feat: |Frontend| Add six-language frontend support (`zh` / `en` / `es` / `pt-BR` / `ja` / `de`), keep `zh` as the default locale; locale-unprefixed routes (for example `/` and `/user`) render in Chinese by default while still recording browser language as the stored preference. Explicit locale switches are persisted, and the current route, query string, and canonical locale URL stay in sync during switching
+- feat: |API| Add server-side parsed-mail endpoints `/api/parsed_mails` and `/api/parsed_mail/:id` that return `sender` / `subject` / `text` / `html` / `attachments` metadata directly (reuses `commonParseMail`), so AI agents no longer need a client-side MIME parser
+- feat: |Skill| Bundle a read-only skill `cf-temp-mail-agent-mail` (`skills/cf-temp-mail-agent-mail/`) so AI agents like OpenClaw / Codex / Cursor can consume a mailbox with a user-supplied Address JWT + API base URL — list mails, poll verification codes, etc. — sidestepping the Turnstile challenge required to create a mailbox. Install via `npx degit dreamhunter2333/cloudflare_temp_email/skills/cf-temp-mail-agent-mail`
+- docs: |Docs| Add "AI Agent Mailbox Usage" doc (`guide/feature/agent-email`) covering the `parsed_mail` API and a local-parse fallback using `mail-parser-wasm` + `postal-mime` (mirrors the frontend) when parsed endpoints are unavailable
+- docs: |Docs| Make "a domain is a hard prerequisite" explicit at the top of `quick-start`, `worker-vars`, and `email-routing` (zh + en), spelling out that Cloudflare Email Routing must be enabled with email DNS records provisioned before deployment, the Catch-all rule must be bound after the Worker is deployed, and subdomains do not inherit the parent domain's Email Routing — so users no longer start deploying without a usable domain and end up unable to receive mail (issue #1004)
+
+### Bug Fixes
+
+- fix: |Frontend| Narrow address-management modal widths and keep address tables horizontally scrollable inside the modal to prevent multi-address lists from stretching the dialog
+- fix: |Frontend| Fix the frontend settings bootstrap throwing an `undefined` error when `/open_api/settings` does not return a `domains` array by normalizing the field to an empty array before mapping it
+- fix: |Frontend| Fix every API call crashing client-side with `Invalid character in header content ["Authorization"]` when stale localStorage credentials (`jwt` / `auth` / `adminAuth` / `userJwt` / `access_token`) are empty, the literal string `"undefined"`, or contain a stray newline or other control character (issue #1000). Adds `safeHeaderValue` / `safeBearerHeader` helpers that validate every auth header against RFC 7230 and omit the header entirely when unsafe, so the worker returns a clean 401 instead of the request being rejected by axios/undici
+
+### Improvements
+
+- refactor: |Worker| Split `mails_api/index.ts` and `admin_api/index.ts` so the index files only wire routes. Business logic moved into dedicated `*_api.ts` files (`mails_crud.ts` / `new_address.ts` / `parsed_mail_api.ts` / `address_api.ts` / `address_sender_api.ts` / `sendbox_api.ts` / `statistics_api.ts` / `account_settings_api.ts`). Paths and behavior unchanged
+
 ## v1.7.0(main)
 
 ### Breaking Changes
@@ -18,6 +38,7 @@
 
 ### Bug Fixes
 
+- fix: |Send Mail| Auto-initialize the default send balance for addresses that have no `address_sender` row yet when `DEFAULT_SEND_BALANCE > 0`, on the first send-settings read or send API call (`ON CONFLICT DO NOTHING`). Existing rows — including admin-disabled or admin-edited ones — are never overwritten by the runtime path, so users no longer need to manually request send permission first (#925 #985)
 - fix: |User Mailbox| Fix an issue where the user center still showed delete actions and could still delete mail via `/user_api/mails/:id` when `ENABLE_USER_DELETE_EMAIL` was disabled (#978)
 - fix: |Address| Lowercase configured prefixes when creating addresses to avoid generating mixed-case mailbox names; existing data must be migrated to lowercase manually by the user (#930)
 

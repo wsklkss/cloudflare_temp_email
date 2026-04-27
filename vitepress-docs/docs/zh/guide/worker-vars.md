@@ -13,6 +13,10 @@
 | `ENABLE_USER_CREATE_EMAIL` | 文本/JSON   | 是否允许用户创建邮箱, 不配置则不允许       | `true`                               |
 | `ENABLE_USER_DELETE_EMAIL` | 文本/JSON   | 是否允许用户删除邮件, 不配置则不允许       | `true`                               |
 
+> [!IMPORTANT] DOMAINS 与 DEFAULT_DOMAINS 必须先在 Cloudflare 配置好
+> 这里填写的所有域名（包括下文「邮箱相关变量」里的 `DEFAULT_DOMAINS`、`USER_ROLES.domains`、`RANDOM_SUBDOMAIN_DOMAINS` 等）必须是你**已经在 Cloudflare Email Routing 中启用并完成邮件 DNS 记录下发**的域名。Worker 部署完成后，还需要把该域名的 Catch-all 规则绑定到这个 Worker，否则邮件无法投递到 Worker。
+> 配置步骤见 [Cloudflare Email Routing](/zh/guide/email-routing)。
+
 ## 后台相关变量
 
 | 变量名                         | 类型      | 说明                                 | 示例             |
@@ -37,7 +41,7 @@
 | `RANDOM_SUBDOMAIN_LENGTH`             | 数字      | 随机子域名长度，默认 `8`，范围 `1-63`                                                                                            | `8`                                       |
 | `DOMAIN_LABELS`                       | JSON      | 对于中文域名，可以使用 DOMAIN_LABELS 显示域名的中文展示名称                                                                       | `["中文.awsl.uk", "dreamhunter2333.xyz"]` |
 | `ENABLE_AUTO_REPLY`                   | 文本/JSON | 允许自动回复邮件。发件人过滤（`source_prefix`）支持三种模式：留空匹配所有发件人、填写前缀进行 `startsWith` 匹配、使用 `/regex/` 语法进行正则匹配（如 `/@example\.com$/`） | `true`                                    |
-| `DEFAULT_SEND_BALANCE`                | 文本/JSON | 默认发送邮件余额，如果不设置，将为 0                                                                                              | `1`                                       |
+| `DEFAULT_SEND_BALANCE`                | 文本/JSON | 默认发送邮件余额；当值大于 `0` 时，用户打开前端设置页或首次发送邮件时会自动初始化该额度。如果不设置，将为 `0`                                                                                              | `1`                                       |
 | `ENABLE_ADDRESS_PASSWORD`             | 文本/JSON | 启用邮箱地址密码功能，启用后创建新地址时会自动生成密码，并支持密码登录和修改                                                      | `true`                                    |
 | `SEND_MAIL_DOMAINS`                   | JSON      | 限制 `SEND_MAIL` binding 可用于哪些发件域名；留空或不配置时允许所有域名                                                            | `["example.com", "mail.example.com"]`     |
 
