@@ -6,7 +6,20 @@
   <a href="CHANGELOG_EN.md">English</a>
 </p>
 
-## v1.8.0(main)
+## v1.9.0(main)
+
+### Features
+
+- feat: |Frontend| Upgrade the address credential dialog to "Address Credentials & Connection Methods" and reuse it for both normal users and admin-created addresses; support showing AI Agent access via `ENABLE_AGENT_EMAIL_INFO` and SMTP/IMAP client settings via `SMTP_IMAP_PROXY_CONFIG`
+
+### Bug Fixes
+
+- fix: |Admin| Hash address passwords in the frontend before admin reset requests, and make the backend accept and store only the hash instead of plaintext
+- fix: |Address| Stop returning stored address password hashes from the admin address list and user bound-address list APIs to avoid exposing sensitive fields
+
+### Improvements
+
+## v1.8.0
 
 ### Features
 
@@ -15,18 +28,22 @@
 - feat: |Skill| Bundle a read-only skill `cf-temp-mail-agent-mail` (`skills/cf-temp-mail-agent-mail/`) so AI agents like OpenClaw / Codex / Cursor can consume a mailbox with a user-supplied Address JWT + API base URL — list mails, poll verification codes, etc. — sidestepping the Turnstile challenge required to create a mailbox. Install via `npx degit dreamhunter2333/cloudflare_temp_email/skills/cf-temp-mail-agent-mail`
 - docs: |Docs| Add "AI Agent Mailbox Usage" doc (`guide/feature/agent-email`) covering the `parsed_mail` API and a local-parse fallback using `mail-parser-wasm` + `postal-mime` (mirrors the frontend) when parsed endpoints are unavailable
 - docs: |Docs| Make "a domain is a hard prerequisite" explicit at the top of `quick-start`, `worker-vars`, and `email-routing` (zh + en), spelling out that Cloudflare Email Routing must be enabled with email DNS records provisioned before deployment, the Catch-all rule must be bound after the Worker is deployed, and subdomains do not inherit the parent domain's Email Routing — so users no longer start deploying without a usable domain and end up unable to receive mail (issue #1004)
+- docs: |Deployment troubleshooting| Improve docs for recent UI-deployment and upgrade issues: document `nodejs_compat`, the required uppercase `DB` D1 binding, `/open_api/settings` verification, backend API URL entry, Cloudflare security challenges causing `Network Error`, D1 size limits and Cron Trigger cleanup, GitHub OAuth public email requirements, the difference between admin passwords and user accounts, and the `enableRandomSubdomain` API flag; move the Help/FAQ menu directly after Core Configuration so it is easier to find
+- docs: |Docs| Document how to handle the "address already exists" case when recreating an old mailbox, and clarify the GitHub Actions workflow for automatic updates with Page Functions forwarding backend requests (issues #947 #654)
+- docs: |OAuth2| Document GitHub private-email login configuration using `https://api.github.com/user/emails`, a JSONPath email field, and the `user:email` scope to read the primary email (issue #655)
 
 ### Bug Fixes
 
 - fix: |Frontend| Narrow address-management modal widths and keep address tables horizontally scrollable inside the modal to prevent multi-address lists from stretching the dialog
 - fix: |Frontend| Fix the frontend settings bootstrap throwing an `undefined` error when `/open_api/settings` does not return a `domains` array by normalizing the field to an empty array before mapping it
 - fix: |Frontend| Fix every API call crashing client-side with `Invalid character in header content ["Authorization"]` when stale localStorage credentials (`jwt` / `auth` / `adminAuth` / `userJwt` / `access_token`) are empty, the literal string `"undefined"`, or contain a stray newline or other control character (issue #1000). Adds `safeHeaderValue` / `safeBearerHeader` helpers that validate every auth header against RFC 7230 and omit the header entirely when unsafe, so the worker returns a clean 401 instead of the request being rejected by axios/undici
+- fix: |Frontend| Fix the multilingual header on mobile by keeping only the menu button in the top bar and moving language/version actions into the drawer to avoid horizontal crowding or overflow
 
 ### Improvements
 
 - refactor: |Worker| Split `mails_api/index.ts` and `admin_api/index.ts` so the index files only wire routes. Business logic moved into dedicated `*_api.ts` files (`mails_crud.ts` / `new_address.ts` / `parsed_mail_api.ts` / `address_api.ts` / `address_sender_api.ts` / `sendbox_api.ts` / `statistics_api.ts` / `account_settings_api.ts`). Paths and behavior unchanged
 
-## v1.7.0(main)
+## v1.7.0
 
 ### Breaking Changes
 
@@ -44,7 +61,7 @@
 
 ### Improvements
 
-## v1.6.0(main)
+## v1.6.0
 
 ### Features
 
@@ -68,7 +85,7 @@
 - docs: |Email Sending| Enhance SMTP_CONFIG field reference and multi-domain examples, add send balance mechanism documentation
 - docs: |Email Routing| Note that subdomains require Email Routing to be enabled separately; enabling it only on the apex domain does not cover subdomains (#969)
 
-## v1.5.0(main)
+## v1.5.0
 
 ### Features
 
