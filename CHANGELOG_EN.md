@@ -6,7 +6,24 @@
   <a href="CHANGELOG_EN.md">English</a>
 </p>
 
-## v1.13.0(main)
+## v1.14.0(main)
+
+### Features
+
+### Bug Fixes
+
+- fix: |Telegram| Clean up the current push recipient's binding and push mapping before admin mailbox deletion, freeing a slot and preventing stale pushes on recreation; KV cleanup failures preserve the mailbox for retry, while database deletion failures may leave it unbound
+- fix: |CI| Fix WASM npm publishing paths so local tarballs are not interpreted as GitHub repositories
+- fix: |Mail Parser| Upgrade WASM parser dependencies and use raw values only for structured headers, preserving decoded text headers while fixing `header.From` webhook filters and sender loss after attachment removal
+- fix: |Mail Parser| Support postal-mime v4's first-header semantics: handle empty/missing From in fallback parsing and regenerate MIME type/encoding headers when removing attachments to preserve stored message bodies
+- fix: |Worker| Process unknown-mail, unbound-address, and empty-address cleanup in bounded batches to avoid D1 timeouts on large backlogs
+- fix: |User| Bind the mailbox transfer confirmation button to the existing request loading state, fixing the undefined loading variable
+
+### Improvements
+
+- perf: |CI| Organize test suites and run a dedicated Webhook UI group alongside API, other browser tests and SMTP/IMAP, with only each group's required services, separate unit/WASM tests and one aggregate check
+
+## v1.13.0
 
 ### Features
 
@@ -18,10 +35,12 @@
 
 - fix: |Mail| Check the SMTP envelope sender and every From email address against sender blacklists; parse addresses independently so body parsing failures or multiple From addresses cannot skip matching; preserve envelope checks on address parsing errors
 - fix: |AI Extract| In `ai` mode, an address allowlist miss now skips only the Workers AI call and still falls back to local verification-code extraction
+- fix: |Telegram| Fall back to HTML-to-text conversion when plain text body is empty, preventing "parse failed" messages in Telegram notifications
 
 ### Improvements
 
 - feat: |AI Extract| Improve local verification-code rules: also read the mail subject; support codes before keywords (e.g. `116352（动态验证码）`, `ABC123 is your code`), `G-123456` prefixes, grouped / spaced / zero-width-split / full-width codes, and Russian, Spanish, Portuguese, French, German, Italian, Turkish and Hebrew keywords; reject numbers longer than 8 digits, decimals and amounts, times, digits in URLs and email addresses, tracking / order / voucher codes and letters-only words; only accept keyword-less numbers in stricter positions; bound input length and remove regex backtracking risks
+- feat: |Frontend| Unify desktop and mobile mail summaries with prominent subjects, full sender identities and body previews; use theme-aware reader buttons and attachment-count badges, add keyboard-accessible actions and a mail-details dialog
 
 ## v1.12.0
 
