@@ -10,8 +10,12 @@
 
 ### Features
 
+- feat: |User System| Add `DISABLE_USER_SYSTEM` to block user APIs, disable user admin tokens, and hide user interfaces
+- feat: |Mailbox Login| Add a password-only login-page switch that requires mailbox passwords; preserve existing credentials, login links, API access, and JWT lifetimes
+
 ### Bug Fixes
 
+- fix: |Mail Reader| Reset inherited application defaults in Shadow mail and use browser-default system colors for a normal document while preserving sender colors
 - fix: |Telegram| Clean up the current push recipient's binding and push mapping before admin mailbox deletion, freeing a slot and preventing stale pushes on recreation; KV cleanup failures preserve the mailbox for retry, while database deletion failures may leave it unbound
 - fix: |CI| Fix WASM npm publishing paths so local tarballs are not interpreted as GitHub repositories
 - fix: |Mail Parser| Upgrade WASM parser dependencies and use raw values only for structured headers, preserving decoded text headers while fixing `header.From` webhook filters and sender loss after attachment removal
@@ -21,6 +25,8 @@
 - fix: |User| Bind the mailbox transfer confirmation button to the existing request loading state, fixing the undefined loading variable
 
 ### Improvements
+
+- docs: |User| Document mailbox binding, bound mailbox credential retrieval, and unbinding APIs with dual authentication requirements and request examples
 
 - perf: |CI| Organize test suites and run a dedicated Webhook UI group alongside API, other browser tests and SMTP/IMAP, with only each group's required services, separate unit/WASM tests and one aggregate check
 

@@ -10,6 +10,7 @@
 | `DOMAINS`                  | JSON        | 用于临时邮箱的所有域名, 支持多个域名       | `["awsl.uk", "dreamhunter2333.xyz"]` |
 | `JWT_SECRET`               | 文本/Secret | 用于签名 JWT 的密钥，JWT 用于登录鉴权。请使用随机字符串，例如通过 `openssl rand -hex 32` 生成  | `a1b2c3d4...`                        |
 | `ADMIN_PASSWORDS`          | JSON        | admin 控制台密码, 不配置则不允许访问控制台 | `["123", "456"]`                     |
+| `DISABLE_USER_SYSTEM` | 文本/JSON | 拦截用户系统接口，隐藏前端用户界面；默认关闭 | `true` |
 | `ENABLE_USER_CREATE_EMAIL` | 文本/JSON   | 是否允许用户创建邮箱, 不配置则不允许       | `true`                               |
 | `ENABLE_USER_DELETE_EMAIL` | 文本/JSON   | 是否允许用户删除邮件, 不配置则不允许       | `true`                               |
 | `ENABLE_MAIL_READ_STATUS` | 文本/JSON | 启用邮件已读/未读状态。启用前需要升级数据库 Schema | `true` |
@@ -50,6 +51,7 @@
 | `ENABLE_AUTO_REPLY`                   | 文本/JSON | 允许自动回复邮件。发件人过滤（`source_prefix`）支持三种模式：留空匹配所有发件人、填写前缀进行 `startsWith` 匹配、使用 `/regex/` 语法进行正则匹配（如 `/@example\.com$/`） | `true`                                    |
 | `DEFAULT_SEND_BALANCE`                | 文本/JSON | 默认发送邮件余额；当值大于 `0` 时，用户打开前端设置页或首次发送邮件时会自动初始化该额度。如果不设置，将为 `0`                                                                                              | `1`                                       |
 | `ENABLE_ADDRESS_PASSWORD`             | 文本/JSON | 启用邮箱地址密码功能，启用后创建新地址时会自动生成密码，并支持密码登录和修改                                                      | `true`                                    |
+| `ADDRESS_PASSWORD_LOGIN_ONLY` | 文本/JSON | 默认 `false`，仅在 `ENABLE_ADDRESS_PASSWORD=true` 时生效；登录页只显示密码登录并隐藏凭据登录切换按钮。当前仅控制登录页，旧凭据、登录链接和 API 访问仍可使用，不改变 JWT 时效 | `true` |
 | `ENABLE_AGENT_EMAIL_INFO`             | 文本/JSON | 是否在前端“地址凭证与连接方式”弹窗中展示 AI Agent 接入信息（Address JWT、parsed-mail API、skill 链接）                         | `true`                                    |
 | `SMTP_IMAP_PROXY_CONFIG`              | JSON      | 在前端“地址凭证与连接方式”弹窗中展示 SMTP/IMAP 代理连接信息；仅用于展示给用户，不会启动代理服务，代理服务仍需单独部署           | 见下方示例                                |
 | `SEND_MAIL_DOMAINS`                   | JSON      | 限制 `SEND_MAIL` binding 可用于哪些发件域名；留空或不配置时允许所有域名                                                            | `["example.com", "mail.example.com"]`     |
