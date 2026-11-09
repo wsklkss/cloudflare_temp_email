@@ -392,6 +392,14 @@ export const MESSAGE_REGISTRY = {
       "en": "Auto-login link",
       "zh": "自动登录链接"
     },
+    "autoLoginQrCode": {
+      "en": "Scan to open on mobile",
+      "zh": "手机扫码打开"
+    },
+    "autoLoginQrCodeTip": {
+      "en": "Anyone with this QR code can access this mailbox. Do not share it.",
+      "zh": "任何获取此二维码的人都可以访问该邮箱，请勿分享。"
+    },
     "copyFailed": {
       "en": "Copy failed",
       "zh": "复制失败"
@@ -2373,7 +2381,84 @@ export const MESSAGE_REGISTRY = {
       "zh": "Telegram 白名单(手动输入 Chat ID, 回车增加)"
     }
   },
+  "views.admin.BatchExportModal": {
+    "title": {
+      "en": "Export login links",
+      "zh": "导出登录链接"
+    },
+    "spreadsheet": {
+      "en": "Spreadsheet-safe CSV (Excel, Google Sheets)",
+      "zh": "电子表格安全 CSV（Excel、Google 表格）"
+    },
+    "spreadsheetTip": {
+      "en": "Cells that start with =, +, -, {'@'}, tab or carriage return get a leading ' so spreadsheets keep them as text. Programs reading this file will see the ' as part of the value.",
+      "zh": "以 =、+、-、{'@'}、制表符或回车开头的单元格会加上前导 '，使表格软件将其作为文本显示。程序读取此文件时，' 会成为值的一部分。"
+    },
+    "raw": {
+      "en": "Lossless CSV (scripts and programs)",
+      "zh": "无损 CSV（脚本和程序）"
+    },
+    "rawTip": {
+      "en": "Standard CSV with the original addresses and login links unchanged. Do not open it in a spreadsheet if an address starts with =, +, - or {'@'}.",
+      "zh": "标准 CSV，原样保留地址和登录链接。如果地址以 =、+、- 或 {'@'} 开头，请勿用表格软件打开。"
+    },
+    "download": {
+      "en": "Download CSV",
+      "zh": "下载 CSV"
+    },
+    "close": {
+      "en": "Close",
+      "zh": "关闭"
+    }
+  },
+  "views.admin.BatchCreate": {
+    "randomNameTip": { "en": "Mailbox names are generated randomly.", "zh": "邮箱名称将随机生成。" },
+    "batchCount": {
+      "en": "Batch count (1–100)",
+      "zh": "批量数量（1–100）"
+    },
+    "createBatch": {
+      "en": "Create batch",
+      "zh": "批量创建"
+    },
+    "batchValidation": {
+      "en": "Choose a domain and an integer count from 1 to 100. Custom subdomains cannot be empty.",
+      "zh": "请选择域名并输入 1–100 的整数数量，自定义子域名不能为空。"
+    },
+    "batchNameError": {
+      "en": "The configured address normalization cannot produce a valid random name.",
+      "zh": "配置的地址规范化规则无法生成有效的随机名称。"
+    },
+    "batchProgress": {
+      "en": "Completed: {completed} / {requested}",
+      "zh": "已完成：{completed} / {requested}"
+    },
+    "batchStopped": {
+      "en": "Batch stopped. Interrupted requests may have created a mailbox with an unknown outcome. Known successes can still be exported.",
+      "zh": "批量创建已停止。中断的请求可能已创建邮箱，结果未知。仍可导出已确认成功的记录。"
+    },
+    "exportCsv": {
+      "en": "Export CSV",
+      "zh": "导出 CSV"
+    },
+    "clearResults": {
+      "en": "Clear results",
+      "zh": "清空结果"
+    },
+    "batchTotal": {
+      "en": "Saved results: {count}",
+      "zh": "已保存结果：{count}"
+    },
+    "batchSecurity": {
+      "en": "Anyone holding these links can access the mailboxes. Private deployments still require site-access credentials. Results stay in memory until you leave this view or clear them.",
+      "zh": "任何持有这些链接的人都可访问邮箱。私有部署仍需要站点访问凭据。结果仅保存在内存中，离开此页面或清空后即消失。"
+    },
+  },
   "views.admin.CreateAccount": {
+    "creationMode": { "en": "Creation mode", "zh": "创建方式" },
+    "singleMode": { "en": "Single creation", "zh": "单个创建" },
+    "batchMode": { "en": "Batch creation", "zh": "批量创建" },
+    "domain": { "en": "Domain", "zh": "域名" },
     "address": {
       "en": "Email Address",
       "zh": "邮箱地址"
@@ -2637,6 +2722,10 @@ export const MESSAGE_REGISTRY = {
     "create_address_subdomain_match_tip": {
       "en": "Only affects /api/new_address and /admin/new_address domain validation. Example: when enabled, foo.example.com can match configured base domain example.com.",
       "zh": "仅影响 /api/new_address 和 /admin/new_address 的域名校验。例如开启后，foo.example.com 可以匹配已配置的基础域名 example.com。"
+    },
+    "delete_original": {
+      "en": "Delete original after forwarding",
+      "zh": "转发成功后删除原邮件"
     },
     "delete_rule": {
       "en": "Delete",
