@@ -356,6 +356,22 @@ export const MESSAGE_REGISTRY = {
     }
   },
   "components.AddressCredentialModal": {
+    "passwordOnlyTip": {
+      "en": "Sign in with the mailbox password to view a session token.",
+      "zh": "请使用邮箱密码登录后查看当前会话 Token。"
+    },
+    "sessionToken": {
+      "en": "Session Token",
+      "zh": "会话 Token"
+    },
+    "expiresAt": {
+      "en": "Expires at",
+      "zh": "到期时间"
+    },
+    "sessionTokenTip": {
+      "en": "This token expires at the time shown above. Sign in again after expiry. Auto-login links and QR codes use the same token and expire with it.",
+      "zh": "此 Token 在上述时间到期，过期后请重新登录。自动登录链接和二维码使用同一个 Token，并在同一时间失效。"
+    },
     "addressCredential": {
       "en": "Address Credential",
       "zh": "地址凭证"
@@ -1102,6 +1118,10 @@ export const MESSAGE_REGISTRY = {
     }
   },
   "views.user.AddressManagement": {
+    "unbindPasswordTip": {
+      "en": "Save the mailbox password before unlinking so you can log in again.",
+      "zh": "解绑前请保存邮箱密码，以便之后重新登录。"
+    },
     "actions": {
       "en": "Actions",
       "zh": "操作"
@@ -1227,6 +1247,10 @@ export const MESSAGE_REGISTRY = {
     "showAddressCredential": {
       "en": "Credentials & Connection Methods",
       "zh": "地址凭证与连接方式"
+    },
+    "showSessionToken": {
+      "en": "View Session Token",
+      "zh": "查看当前会话 Token"
     },
     "success": {
       "en": "Success",
@@ -1914,28 +1938,38 @@ export const MESSAGE_REGISTRY = {
     }
   },
   "views.admin.Statistics": {
-    "activeAddressCount30days": {
-      "en": "30 days Active Address Count",
-      "zh": "30天活跃邮箱地址总数"
-    },
-    "activeAddressCount7days": {
-      "en": "7 days Active Address Count",
-      "zh": "7天活跃邮箱地址总数"
-    },
+    "refresh": { "en": "Refresh", "zh": "刷新" },
+    "dateRange": { "en": "Time range", "zh": "时间范围" },
+    "days7": { "en": "Last 7 days", "zh": "近 7 天" },
+    "days30": { "en": "Last 30 days", "zh": "近 30 天" },
+    "today": { "en": "Today", "zh": "今天" },
+    "rangeLimit": { "en": "Select a range of up to 30 days.", "zh": "单次最多查看 30 天，请缩小日期范围。" },
+    "rangeHelp": { "en": "Up to 30 days", "zh": "最多 30 天" },
+    "applyRange": { "en": "Apply", "zh": "应用" },
+    "received": { "en": "Incoming mail", "zh": "接收邮件数" },
+    "newAddresses": { "en": "Mailboxes created", "zh": "邮箱创建数" },
+    "sent": { "en": "Outgoing mail", "zh": "发送邮件数" },
+    "newUsers": { "en": "User registrations", "zh": "用户注册数" },
+    "chartLabel": { "en": "{title}: {count}", "zh": "{title}：{count}" },
+    "loadError": { "en": "Could not load statistics. Try refreshing.", "zh": "统计加载失败，请刷新重试。" },
+    "activeAddressCount7days": { "en": "Active mailboxes (7 days)", "zh": "7 天活跃邮箱" },
+    "activeAddressCount30days": { "en": "Active mailboxes (30 days)", "zh": "30 天活跃邮箱" },
+    "activeUserCount7days": { "en": "Active users (7 days)", "zh": "7 天活跃用户" },
+    "activeUserCount30days": { "en": "Active users (30 days)", "zh": "30 天活跃用户" },
     "addressCount": {
-      "en": "Address Count",
-      "zh": "邮箱地址总数"
+      "en": "Total mailboxes",
+      "zh": "邮箱总数"
     },
     "mailCount": {
-      "en": "Mail Count",
+      "en": "Total mail",
       "zh": "邮件总数"
     },
     "sendMailCount": {
-      "en": "Send Mail Count",
-      "zh": "发送邮件总数"
+      "en": "Total sent",
+      "zh": "发件总数"
     },
     "userCount": {
-      "en": "User Count",
+      "en": "Total users",
       "zh": "用户总数"
     }
   },
@@ -2002,6 +2036,10 @@ export const MESSAGE_REGISTRY = {
     }
   },
   "views.index.LocalAddress": {
+    "loginMethod": {
+      "en": "Login Method",
+      "zh": "登录方式"
+    },
     "actions": {
       "en": "Actions",
       "zh": "操作"
@@ -2843,9 +2881,17 @@ export const MESSAGE_REGISTRY = {
       "en": "e.g. gmail.com",
       "zh": "例如: gmail.com"
     },
+    "recipient_patterns": {
+      "en": "Recipient Address Regex (Optional)",
+      "zh": "收件人地址正则（可选）"
+    },
+    "recipient_patterns_placeholder": {
+      "en": "e.g. admin",
+      "zh": "例如: admin"
+    },
     "source_patterns_tip": {
-      "en": "Domain list filters by recipient address, source regex filters by sender address. Both conditions must match for forwarding (AND logic). Leave either empty to skip that filter.",
-      "zh": "域名列表按收件地址过滤，来源正则按发件地址过滤，两者均为可选。同时配置时需同时满足（AND 逻辑），留空则跳过该条件。"
+      "en": "Domain, sender regex and recipient regex filters must all match. Empty filters are ignored. Regex matching is case-insensitive and uses the full envelope address, not the message headers.",
+      "zh": "域名、来源正则和收件人正则需同时满足，留空则跳过该条件。正则不区分大小写，匹配完整的信封地址，而非邮件头。"
     },
     "successTip": {
       "en": "Save Success",

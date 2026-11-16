@@ -129,9 +129,14 @@ type Bindings = {
     CLEANUP_BATCH_SIZE: string | number | undefined
 }
 
+type JwtType = 'address_credential_login' | 'address_password_login'
+
 type JwtPayload = {
     address: string
     address_id: number
+    type?: JwtType
+    iat?: number
+    exp?: number
 }
 
 type UserPayload = {
@@ -192,4 +197,6 @@ type SubdomainForwardAddressList = {
     // 来源地址正则匹配 (可选，兼容原配置)
     sourcePatterns?: string[] | undefined | null,  // 来源地址正则表达式列表
     sourceMatchMode?: 'any' | 'all' | undefined,   // 匹配模式: any-任一匹配, all-全部匹配
+    recipientPatterns?: string[] | undefined | null,
+    recipientMatchMode?: 'any' | 'all' | undefined,
 }
